@@ -40,13 +40,14 @@
 
     const dispatch = createEventDispatcher();
     export function clickRow(row) {
-        console.log("clicked");
+        console.log(row);
+        dispatch('showTicket', { ticketId: row.id });
     }
 </script>
 
 <main>
     <div class="request-table">
-        <SvelteTable columns="{columns}" rows="{rows}"></SvelteTable>
+        <SvelteTable columns="{columns}" rows="{rows}" on:clickRow={e => clickRow(e.detail.row)}></SvelteTable>
     </div>
 </main>
 
