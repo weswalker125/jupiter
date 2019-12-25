@@ -30,7 +30,7 @@
 
   body {
     font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif;
-    background: #3aafab;
+    background: #bf573f;
     color: #fff;
     padding: 50px 0;
   }
