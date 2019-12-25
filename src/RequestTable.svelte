@@ -1,5 +1,6 @@
 <script>
     import SvelteTable from 'svelte-table';
+    import { createEventDispatcher } from 'svelte';
 
     export const rows = [
         { id: 2, createdAt: new Date(2019, 11, 3), type: "General", status: "Complete" },
@@ -36,6 +37,11 @@
             headerClass: "request-table-header"
         },
     ];
+
+    const dispatch = createEventDispatcher();
+    export function clickRow(row) {
+        console.log("clicked");
+    }
 </script>
 
 <main>
