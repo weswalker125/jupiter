@@ -1,14 +1,9 @@
 <script>
     import SvelteTable from 'svelte-table';
     import { createEventDispatcher } from 'svelte';
+    import axios from 'axios';
 
-    export const rows = [
-        { id: 2, createdAt: new Date(2019, 11, 3), type: "General", status: "Complete" },
-        { id: 10, createdAt: new Date(2019, 11, 5), type: "Account", status: "Pending Approval" },
-        { id: 14, createdAt: new Date(2019, 11, 10), type: "General", status: "Complete" },
-        { id: 22, createdAt: new Date(2019, 10, 28), type: "Account", status: "Rejected" },
-        { id: 24, createdAt: new Date(2019, 11, 24), type: "General", status: "In Progress" },
-    ];
+    export let rows = [];
     const columns = [
         {
             key: "id",
@@ -20,7 +15,10 @@
         {
             key: "createdAt",
             title: "Created",
-            value: v => v.createdAt.toLocaleDateString(),
+            value: v => {
+                let d = new Date(v.createdAt);
+                return d.toLocaleDateString();
+            },
             sortable: true
         },
         {
@@ -43,6 +41,19 @@
         console.log(row);
         dispatch('showTicket', { ticketId: row.id });
     }
+
+    function getData() {
+        let url = "http://localhost:3000/tickets";
+        axios.get(url)
+            .then((response) => {
+                rows = response.data;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    getData();
 </script>
 
 <main>

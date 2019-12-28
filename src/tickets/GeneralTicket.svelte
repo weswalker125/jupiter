@@ -1,6 +1,7 @@
 <script>
     import { form } from 'svelte-forms';
     import axios from 'axios';
+    import moment from 'moment';
 
     // Fields
     let name = '';
@@ -18,18 +19,23 @@
 
     // Submit function
     const createListItem = () => {
-        let url = "/_api/web/lists/GetByTitle('Jupiter')/items";
+        // let url = "/_api/web/lists/GetByTitle('Jupiter')/items";
+        let url = 'http://localhost:3000/tickets';
         axios({
                 method: 'post',
                 url: url,
-                headers: {
-                    'accept': 'application/json;odata=verbose'
-                },
+                // headers: {
+                //     'accept': 'application/json;odata=verbose'
+                // },
                 data: {
-                    Name: name,
-                    Email: email,
-                    Description: description,
-                    Location: location
+                    id: Math.floor(Math.random() * 3000) + 1000,
+                    name: name,
+                    email: email,
+                    description: description,
+                    location: location,
+                    status: 'New',
+                    type: 'General',
+                    createdAt: moment().format('YYYY-MM-DD')
                 }
             })
             .then((response) => {
@@ -64,7 +70,7 @@
             </li>
             <li class="form-row">
                 <label>Description:</label>
-                <textarea></textarea>
+                <textarea bind:value={description} bindClass={{ form: genTicket }}></textarea>
             </li>
         </ul>
 
@@ -75,7 +81,7 @@
         {#if $genTicket.name.errors.includes('min')}
             <p>the name should be at least 6 characters</p>
         {/if}
-        <button type="submit" disabled={!$genTicket.valid} on:click={createListItem}>Submit</button>
+        <button disabled={!$genTicket.valid} on:click|preventDefault={createListItem}>Submit</button>
     </form>
 </main>
 

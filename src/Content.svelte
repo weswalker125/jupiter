@@ -1,9 +1,11 @@
 <script>
 import { getContext } from 'svelte';
-import GeneralTicket from './GeneralTicket.svelte';
-import NewAccount from './NewAccount.svelte';
+import GeneralTicket from './tickets/GeneralTicket.svelte';
+import NewAccount from './tickets/NewAccount.svelte';
 import RequestTable from './RequestTable.svelte';
-import ViewTicket from './ViewTicket.svelte';
+import ViewTicket from './tickets/ViewTicket.svelte';
+import axios from 'axios';
+
 
 const { open } = getContext('simple-modal');
 
@@ -19,8 +21,15 @@ const showTicket = (clickedRow) => {
     // Get full details on clickedRow
     let id = clickedRow.detail.ticketId;
     console.log(`Fetching data for id=${id}`);
-    let fullTicket = { id: id, blah: "blahblah", filler: "bullshit", something: "else" };
-    open(ViewTicket, { ticket: fullTicket });
+    let url = `http://localhost:3000/tickets/${id}`;
+    axios.get(url)
+        .then((response) => {
+            let fullTicket = response.data;
+            open(ViewTicket, { ticket: fullTicket });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 </script>
 

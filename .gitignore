@@ -1,4 +1,5 @@
 /node_modules/
 /public/build/
-
+Database.json
 .DS_Store
+.env

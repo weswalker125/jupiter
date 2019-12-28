@@ -1,42 +1,26 @@
 <script>
-	import Content from './Content.svelte';
-	import Modal from './Modal.svelte';
+import router, { currentRoute } from './router.js';
+import RouterLink from './RouterLink.svelte';
+import { onMount } from 'svelte';
 
-	export let name;
+onMount(() => {
+	currentRoute.set(window.location.pathname);
+	if (!history.state) {
+		window.history.replaceState({ path: window.location.pathname}, '', window.location.href);
+	}
+});
+
+function handlerBackNavigation(e) {
+	currentRoute.set(e.state.path);
+}
 </script>
 
-<main>
-	<img class='logo' src='./jupiter.svg' alt='Application logo, jupiter'/>
-	<h1>{name}</h1>
-	<p>How can we help you?</p>
-	
-	<Modal>
-		<Content/>
-	</Modal>
-</main>
+<svelte:window on:popstate={handlerBackNavigation} />
+<RouterLink page={{path: '/home', name: 'Home'}} />
+<RouterLink page={{path: '/f1', name: 'F1'}} />
+<RouterLink page={{path: '/testing', name: 'Testing'}} />
 
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-
-	.logo {
-		width: 10em;
-	}
-</style>
+<div id="pageContent">
+	<!-- Page component updates here -->
+	<svelte:component this={router[$currentRoute]} />
+</div>
